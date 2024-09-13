@@ -4,8 +4,6 @@ import { Button, View } from 'react-native';
 
 const ChatBox = () => {
 
-  connect();
-
   const handleSend = () => {
     console.log('Hello Websocket');
     sendMsg('Hello Websocket');
