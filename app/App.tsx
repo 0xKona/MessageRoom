@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   SafeAreaView,
-  Text,
   View,
 } from 'react-native';
 import ChatBox from './components/chatbox';
 import Header from './components/header';
+import ChatHistory from './components/chat-history';
 
 function App(): React.JSX.Element {
 
@@ -13,7 +13,7 @@ function App(): React.JSX.Element {
     <View>
       <Header />
       <SafeAreaView>
-        <Text>Test App</Text>
+        <ChatHistory chatHistory={[]}/>
         <ChatBox />
       </SafeAreaView>
     </View>
