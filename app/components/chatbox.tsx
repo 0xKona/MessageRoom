@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, sendMsg } from '../api-connections/chat';
+import { sendMsg } from '../api-connections/chat';
 import { Button, View } from 'react-native';
 
 const ChatBox = () => {
