@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  SafeAreaView,
+  StyleSheet,
   View,
 } from 'react-native';
-import ChatBox from './components/chatbox';
 import Header from './components/header';
 import ChatHistory from './components/chat-history';
 import { connect } from './api-connections/chat';
+import ChatInput from './components/chat-input/chat-input';
 
 function App(): React.JSX.Element {
 
@@ -22,14 +22,18 @@ function App(): React.JSX.Element {
   }, [chatHistory]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <Header />
-      <SafeAreaView>
-        <ChatHistory chatHistory={chatHistory}/>
-        <ChatBox />
-      </SafeAreaView>
+      <ChatHistory chatHistory={chatHistory}/>
+      <ChatInput />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+  },
+});
 
 export default App;

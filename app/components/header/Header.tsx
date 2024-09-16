@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
   safeContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    height: 90,
   },
   text: {
     margin: 0,

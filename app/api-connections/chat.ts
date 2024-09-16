@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8080/ws');
+const socket = new WebSocket('ws://127.0.0.1:8080/ws');
 
 let connect = (cb: any) => {
   console.log('Attempting Connection...');
@@ -23,7 +23,11 @@ let connect = (cb: any) => {
 
 let sendMsg = (msg: string) => {
   console.log('Sending Message: ', msg);
-  socket.send(msg);
+  try {
+    socket.send(msg);
+  } catch (e) {
+    console.log('Error Sending message');
+  }
 };
 
 export { connect, sendMsg };

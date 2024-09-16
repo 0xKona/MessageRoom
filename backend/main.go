@@ -2,56 +2,37 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
-	"log"
+	"github.com/0xKona/MessageRoom/pkg/websocket"
 	"net/http"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin:     func(r *http.Request) bool { return true },
-}
-
-func reader(conn *websocket.Conn) {
-	for {
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		fmt.Println(string(p))
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
-		}
-	}
-}
-
-func serveWs(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Host)
-
-	ws, err := upgrader.Upgrade(w, r, nil)
+func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("WebSocket Endpoint Hit")
+	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(w, "%+v\n", err)
 	}
 
-	reader(ws)
+	client := &websocket.Client{
+		Conn: conn,
+		Pool: pool,
+	}
+
+	pool.Register <- client
+	client.Read()
 }
 
 func setupRoutes() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, err := fmt.Fprintf(w, "Hello World, This is a GO backend")
-		if err != nil {
-			return
-		}
+	pool := websocket.NewPool()
+	go pool.Start()
+
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		serveWs(pool, w, r)
 	})
-	http.HandleFunc("/ws", serveWs)
 }
 
 func main() {
-	fmt.Println("Starting sever")
+	fmt.Println("Test Websocket App v0.01")
 	setupRoutes()
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

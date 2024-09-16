@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import MessageCard from './message-card';
 
 interface TempMessageType {
     data: string
@@ -10,15 +11,19 @@ interface PropsType {
 }
 
 const ChatHistory = ({ chatHistory }: PropsType) => {
-  const messages = chatHistory.map((msg: TempMessageType, index: number) => (
-    <Text key={index}>{msg.data}</Text>
-  ));
+  console.log('ChatHistory', chatHistory);
+
+  const messages = chatHistory.map((msg: TempMessageType, index: number) => {
+    const message = JSON.parse(msg.data);
+    console.log('Message: ', message.body);
+    return (
+      <MessageCard key={index} messageData={message} />
+    );});
 
   return (
-    <View style={styles.container}>
-      <Text>Chat History</Text>
+    <ScrollView style={styles.container}>
       {messages}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -27,6 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
     margin: 0,
     padding: 20,
+    width: '100%',
+    flexGrow: 1,
   },
 });
 
