@@ -1,4 +1,6 @@
-const socket = new WebSocket('ws://127.0.0.1:8080/ws');
+import { MessageObject } from '../../types/message';
+const userID = 2;
+const socket = new WebSocket(`ws://127.0.0.1:8080/ws?userID=${userID}`);
 
 let connect = (cb: any) => {
   console.log('Attempting Connection...');
@@ -8,7 +10,6 @@ let connect = (cb: any) => {
   };
 
   socket.onmessage = (msg: WebSocketMessageEvent) => {
-    console.log(msg);
     cb(msg);
   };
 
@@ -22,9 +23,10 @@ let connect = (cb: any) => {
 };
 
 let sendMsg = (msg: string) => {
-  console.log('Sending Message: ', msg);
+  const messageObj: MessageObject = {userID: 1, text: msg, type: 1};
+  console.log('Sending Message: ', messageObj);
   try {
-    socket.send(msg);
+    socket.send(JSON.stringify(messageObj));
   } catch (e) {
     console.log('Error Sending message');
   }

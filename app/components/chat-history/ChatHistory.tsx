@@ -1,23 +1,17 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import MessageCard from './message-card';
-
-interface TempMessageType {
-    data: string
-}
+import { MessageObject } from '../../../types/message';
 
 interface PropsType {
-    chatHistory: TempMessageType[]
+    chatHistory: MessageObject[]
 }
 
 const ChatHistory = ({ chatHistory }: PropsType) => {
-  console.log('ChatHistory', chatHistory);
-
-  const messages = chatHistory.map((msg: TempMessageType, index: number) => {
-    const message = JSON.parse(msg.data);
-    console.log('Message: ', message.body);
+  console.log('ChatHistory: ', chatHistory);
+  const messages = chatHistory.map((msg: MessageObject, index: number) => {
     return (
-      <MessageCard key={index} messageData={message} />
+      <MessageCard key={index} messageData={msg} />
     );});
 
   return (

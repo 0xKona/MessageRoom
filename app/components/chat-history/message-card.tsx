@@ -6,16 +6,18 @@ interface PropsType {
 }
 
 const MessageCard = ({messageData}: PropsType) => {
-  console.log('MessageDATA: ', messageData);
+  console.log('Message Card Data: ', messageData);
+
   return (
     <View style={styles.container}>
       {messageData.type === 2 ? (
         <View style={styles.type2}>
-          <Text>{messageData.body}</Text>
+          <Text>{messageData.text}</Text>
         </View>
       ) : (
         <View style={styles.type1}>
-          <Text style={styles.type2Text}>{messageData.body}</Text>
+          <Text style={styles.userName}>{messageData.userID}</Text>
+          <Text style={styles.type2Text}>{messageData.text}</Text>
         </View>
       )}
     </View>
@@ -25,7 +27,6 @@ const MessageCard = ({messageData}: PropsType) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    // backgroundColor: 'orange',
   },
   type2: {
     alignSelf: 'center',
@@ -35,10 +36,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     maxWidth: '80%',
   },
+  userName: {
+    color: 'grey',
+  },
   type1: {
     alignSelf: 'flex-start',
     backgroundColor: 'lightgreen',
-    // width: '45%',
     maxWidth: '80%',
     flexWrap: 'wrap',
     marginVertical: 5,

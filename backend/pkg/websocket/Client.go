@@ -17,6 +17,7 @@ type Message struct {
 	Body string `json:"body"`
 }
 
+// Incoming messages from client
 func (c *Client) Read() {
 	defer func() {
 		c.Pool.Unregister <- c
