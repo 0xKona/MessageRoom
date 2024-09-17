@@ -31,7 +31,7 @@ export const parseTextMessage = (messageData: { data: string }): MessageObject |
 
         // Assign newMessage based on parsed data
         newMessage = {
-          userID: parsedBody.userID,
+          userID: String(parsedBody.userID),
           text: parsedBody.text,
           type: parsedData.type,
         };
@@ -50,7 +50,7 @@ export const parseEnterExit = (messageData: {data: string}) => {
   if (typeof messageData.data === 'string') {
     const data = JSON.parse(messageData.data);
     console.log('EnterExitData', data);
-    newMessage = {text: data.body, type: 2, userID: 1};
+    newMessage = {text: data.body, type: 2, userID: data.body};
   }
 
 

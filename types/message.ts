@@ -1,4 +1,5 @@
 export interface MessageObject {
-    userID: number;
-    text: string
+    userID: string;
+    text: string;
+    type: number
 }

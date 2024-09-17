@@ -24,24 +24,43 @@ func (pool *Pool) Start() {
 		case client := <-pool.Register:
 			pool.Clients[client] = true
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			for client, _ := range pool.Clients {
-				fmt.Println(client)
-				body := fmt.Sprintf("%s Joined...", client.ID)
-				fmt.Println("New Body: ", body)
-				client.Conn.WriteJSON(Message{Type: 2, Body: body})
+
+			// Capture the ID of the newly registered client
+			newUserID := client.ID
+
+			// Broadcast the new user's ID to all clients in the pool
+			for c := range pool.Clients {
+				// Send the new user's ID to all other clients
+				bodyText := fmt.Sprintf("%s has joined.", newUserID)
+				if err := c.Conn.WriteJSON(Message{Type: 2, Body: bodyText}); err != nil {
+					fmt.Println(err)
+					return
+				}
 			}
 			break
+
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			for client, _ := range pool.Clients {
-				client.Conn.WriteJSON(Message{Type: 2, Body: "User Disconnected..."})
+
+			leaverUserID := client.ID
+
+			// Broadcast user disconnection to all clients in the pool
+			for c := range pool.Clients {
+				bodyText := fmt.Sprintf("%s has left.", leaverUserID)
+				if err := c.Conn.WriteJSON(Message{Type: 2, Body: bodyText}); err != nil {
+					fmt.Println(err)
+					return
+				}
 			}
 			break
+
 		case message := <-pool.Broadcast:
 			fmt.Println("Sending message to all clients in Pool")
-			for client, _ := range pool.Clients {
-				if err := client.Conn.WriteJSON(message); err != nil {
+
+			// Broadcast any general message to all clients in the pool
+			for c := range pool.Clients {
+				if err := c.Conn.WriteJSON(message); err != nil {
 					fmt.Println(err)
 					return
 				}
