@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, TextInput } from 'react-native';
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { sendMsg } from '../../api-connections/chat';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ChatInput = () => {
   const [text, setText] = React.useState('');
@@ -14,41 +15,44 @@ const ChatInput = () => {
   };
 
   return (
-    <KeyboardAvoidingView
+    <View
       style={styles.ChatInput}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <SafeAreaView style={styles.SafeContainer}>
         <TextInput style={styles.Input} onChange={updateText} value={text} />
-        <Button title="Send" onPress={sendMessage}/>
+        <TouchableOpacity style={styles.IconContainer} onPress={sendMessage}>
+          <Icon name="send" size={30}/>
+        </TouchableOpacity>
       </SafeAreaView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   ChatInput: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: '#15223b',
+    alignSelf: 'flex-end',
+    backgroundColor: 'white',
     padding: 10,
   },
   SafeContainer: {
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    padding: 10,
+    alignItems: 'center',
+  },
+  IconContainer: {
+    paddingRight: 10,
   },
   Input: {
     padding: 10,
+    paddingHorizontal: 20,
     margin: 0,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 5,
+    marginHorizontal: 10,
+    borderRadius: 20,
     flexGrow: 1,
-    color: 'white',
+    color: 'black',
   },
 });
 

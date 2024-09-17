@@ -6,7 +6,8 @@ interface ParsedData {
 }
 
 interface ParsedBody {
-  userID: number;
+  userID: string;
+  userName: string;
   text: string;
 }
 
@@ -32,6 +33,7 @@ export const parseTextMessage = (messageData: { data: string }): MessageObject |
         // Assign newMessage based on parsed data
         newMessage = {
           userID: String(parsedBody.userID),
+          userName: String(parsedBody.userName),
           text: parsedBody.text,
           type: parsedData.type,
         };
@@ -50,7 +52,7 @@ export const parseEnterExit = (messageData: {data: string}) => {
   if (typeof messageData.data === 'string') {
     const data = JSON.parse(messageData.data);
     console.log('EnterExitData', data);
-    newMessage = {text: data.body, type: 2, userID: data.body};
+    newMessage = {text: data.body, type: 2, userID: data.body, userName: data.body};
   }
 
 

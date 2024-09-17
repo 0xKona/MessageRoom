@@ -15,8 +15,13 @@ const App = (): React.JSX.Element => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Websocket Chat" component={AppScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{
+            headerLeft: () => null,
+          }}/>
+          <Stack.Screen name="Websocket Chat" component={AppScreen} options={{
+            headerLeft: () => null,
+            headerBackVisible: false,
+          }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface PropsType {
     messageData: any
@@ -7,6 +9,9 @@ interface PropsType {
 
 const MessageCard = ({messageData}: PropsType) => {
   console.log('Message Card Data: ', messageData);
+  const { userID } = useSelector((state: RootState) => state.user);
+
+  const isMe = userID === messageData.userID;
 
   return (
     <View style={styles.container}>
@@ -15,8 +20,9 @@ const MessageCard = ({messageData}: PropsType) => {
           <Text>{messageData.text}</Text>
         </View>
       ) : (
-        <View style={styles.type1}>
-          <Text style={styles.userName}>{messageData.userID}</Text>
+        // eslint-disable-next-line react-native/no-inline-styles
+        <View style={{...styles.type1, alignSelf: isMe ? 'flex-end' : 'flex-start'}}>
+          <Text style={styles.userName}>{messageData.userName}</Text>
           <Text style={styles.type2Text}>{messageData.text}</Text>
         </View>
       )}

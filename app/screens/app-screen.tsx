@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import ChatHistory from '../components/chat-history';
 import ChatInput from '../components/chat-input/chat-input';
 import React from 'react';
@@ -33,15 +33,16 @@ const AppScreen = () => {
   }, [chatHistory]);
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <ChatHistory chatHistory={chatHistory}/>
       <ChatInput />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     height: '100%',
   },
 });

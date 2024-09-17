@@ -1,7 +1,8 @@
 import { store } from '../../redux/store';
 import { MessageObject } from '../../types/message';
-const { userID } = store.getState().user;
+const { userID, userName } = store.getState().user;
 console.log('Websocket UserID: ', userID);
+console.log('Websocket UserName: ', userName);
 const socket = new WebSocket(`ws://127.0.0.1:8080/ws?userID=${userID}`);
 
 let connect = (cb: any) => {
@@ -24,8 +25,8 @@ let connect = (cb: any) => {
   };
 };
 
-let sendMsg = (msg: string) => {
-  const messageObj: MessageObject = {userID, text: msg, type: 1};
+let sendMsg = (msg: string, type: number = 1) => {
+  const messageObj: MessageObject = {userID, userName, text: msg, type};
   console.log('Sending Message: ', messageObj);
   try {
     socket.send(JSON.stringify(messageObj));
