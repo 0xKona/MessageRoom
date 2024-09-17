@@ -1,12 +1,24 @@
 import React from 'react';
 import AppScreen from './screens/app-screen';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/login-screen';
 import { Provider } from 'react-redux';
 import { store, persistor } from '../redux/store';
-import { RootStackParamList } from '../types/navigation-types';
+import { RootStackParamList, SettingsNavigationProp } from '../types/navigation-types';
 import { PersistGate } from 'redux-persist/integration/react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native';
+import SettingsScreen from './screens/settings-screen';
+
+const Settings = () => {
+  const navigation = useNavigation<SettingsNavigationProp>();
+  const handlePress = () => navigation.navigate('Settings');
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <Icon name="gears" size={25} />
+    </TouchableOpacity>
+  );};
 
 const App = (): React.JSX.Element => {
 
@@ -22,8 +34,11 @@ const App = (): React.JSX.Element => {
             }}/>
             <Stack.Screen name="Websocket Chat" component={AppScreen} options={{
               headerLeft: () => null,
+
+              headerRight: Settings,
               headerBackVisible: false,
             }}/>
+            <Stack.Screen name="Settings" component={SettingsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>

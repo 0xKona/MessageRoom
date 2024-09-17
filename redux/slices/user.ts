@@ -33,7 +33,7 @@ const userSlice = createSlice({
     setErrorMessage(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
     },
-    resetUserState : () => initialState,
+    userLogout : () => initialState,
     userLogin(state) {
       state.loading = true;
       state.loggedIn = true;
@@ -43,6 +43,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, resetUserState, setUserID, setUserName, setLoading, setErrorMessage } =
+export const { userLogin, userLogout, setUserID, setUserName, setLoading, setErrorMessage } =
   userSlice.actions;
 export default userSlice.reducer;

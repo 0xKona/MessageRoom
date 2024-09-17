@@ -4,10 +4,16 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 export type RootStackParamList = {
     'Websocket Chat': undefined; // or any params if applicable
     'Login': undefined; // or any params if applicable
+    'Settings': undefined
     // other routes...
   };
 
 export type WebsocketChatNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Websocket Chat'
+>;
+
+export type SettingsNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Settings'
 >;

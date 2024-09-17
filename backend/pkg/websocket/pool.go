@@ -57,12 +57,16 @@ func (pool *Pool) Start() {
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 
-			leaverUserID := client.ID
+			leavingUserBody := &BodyStruct{
+				UserID:   client.ID,
+				UserName: client.Name,
+				Text:     fmt.Sprintf("%s has left", client.Name),
+			}
 
 			// Broadcast user disconnection to all clients in the pool
 			for c := range pool.Clients {
-				bodyText := fmt.Sprintf("%s has left.", leaverUserID)
-				if err := c.Conn.WriteJSON(Message{Type: 2, Body: bodyText}); err != nil {
+				bodyText, _ := json.Marshal(leavingUserBody)
+				if err := c.Conn.WriteJSON(Message{Type: 2, Body: string(bodyText)}); err != nil {
 					fmt.Println(err)
 					return
 				}
