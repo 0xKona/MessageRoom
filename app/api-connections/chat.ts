@@ -3,7 +3,7 @@ import { MessageObject } from '../../types/message';
 const { userID, userName } = store.getState().user;
 console.log('Websocket UserID: ', userID);
 console.log('Websocket UserName: ', userName);
-const socket = new WebSocket(`ws://127.0.0.1:8080/ws?userID=${userID}`);
+const socket = new WebSocket(`ws://127.0.0.1:8080/ws?userID=${userID}&userName=${userName}`);
 
 let connect = (cb: any) => {
   console.log('Attempting Connection...');

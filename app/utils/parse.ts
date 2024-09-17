@@ -47,12 +47,12 @@ export const parseTextMessage = (messageData: { data: string }): MessageObject |
 };
 
 export const parseEnterExit = (messageData: {data: string}) => {
-  console.log('EnterExitMessageData: ', messageData);
+  console.log('[parseEnterExit]: Input Data: ', messageData);
   let newMessage: MessageObject | null = null;
   if (typeof messageData.data === 'string') {
-    const data = JSON.parse(messageData.data);
-    console.log('EnterExitData', data);
-    newMessage = {text: data.body, type: 2, userID: data.body, userName: data.body};
+    const data = JSON.parse(JSON.parse(messageData.data).body);
+    console.log('[parseEnterExit]: Parsed Data', data);
+    newMessage = {text: data.Text, type: 2, userID: data.UserID, userName: data.UserName};
   }
 
 

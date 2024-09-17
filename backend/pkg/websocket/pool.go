@@ -1,12 +1,21 @@
 package websocket
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Pool struct {
 	Register   chan *Client
 	Unregister chan *Client
 	Clients    map[*Client]bool
 	Broadcast  chan Message
+}
+
+type BodyStruct struct {
+	UserID   string
+	UserName string
+	Text     string
 }
 
 func NewPool() *Pool {
@@ -25,14 +34,19 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 
-			// Capture the ID of the newly registered client
-			newUserID := client.ID
+			fmt.Println("Client ID: ", client.ID)
+			fmt.Println("Client Name: ", client.Name)
+
+			joiningUserBody := &BodyStruct{
+				UserID:   client.ID,
+				UserName: client.Name,
+				Text:     fmt.Sprintf("%s has joined", client.Name),
+			}
 
 			// Broadcast the new user's ID to all clients in the pool
 			for c := range pool.Clients {
-				// Send the new user's ID to all other clients
-				bodyText := fmt.Sprintf("%s has joined.", newUserID)
-				if err := c.Conn.WriteJSON(Message{Type: 2, Body: bodyText}); err != nil {
+				bodyText, _ := json.Marshal(joiningUserBody)
+				if err := c.Conn.WriteJSON(Message{Type: 2, Body: string(bodyText)}); err != nil {
 					fmt.Println(err)
 					return
 				}

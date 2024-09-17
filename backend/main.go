@@ -13,8 +13,10 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%+v\n", err)
 	}
 	userID := r.URL.Query().Get("userID")
+	userName := r.URL.Query().Get("userName")
 	client := &websocket.Client{
 		ID:   userID,
+		Name: userName,
 		Conn: conn,
 		Pool: pool,
 	}
