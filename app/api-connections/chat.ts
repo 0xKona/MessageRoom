@@ -1,8 +1,9 @@
+import { resetUserState } from '../../redux/slices/user';
 import { store } from '../../redux/store';
 import { MessageObject } from '../../types/message';
+
 const { userID, userName } = store.getState().user;
-console.log('Websocket UserID: ', userID);
-console.log('Websocket UserName: ', userName);
+
 const socket = new WebSocket(`ws://127.0.0.1:8080/ws?userID=${userID}&userName=${userName}`);
 
 let connect = (cb: any) => {
@@ -18,10 +19,12 @@ let connect = (cb: any) => {
 
   socket.onclose = (event: WebSocketCloseEvent) => {
     console.log('Socket Closed Connection: ', event);
+    // store.dispatch(resetUserState());
   };
 
   socket.onerror = (error: WebSocketErrorEvent) => {
     console.log('Socket Error: ', error);
+    // store.dispatch(resetUserState());
   };
 };
 

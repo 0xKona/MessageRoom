@@ -8,15 +8,23 @@ import { TextInput } from 'react-native-paper';
 import { WebsocketChatNavigationProp } from '../../types/navigation-types';
 
 const LoginScreen = () => {
-  const { userName } = useSelector((state: RootState) => state.user);
+  const { userName, loggedIn } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation<WebsocketChatNavigationProp>();
   const setNewUserName = (newName: string) => dispatch(setUserName(newName));
   console.log('User Name: ', userName);
+  console.log('User LoggedIn? : ', loggedIn);
   const handleEnter = () => {
     dispatch(userLogin());
     navigation.navigate('Websocket Chat');
   };
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      navigation.navigate('Websocket Chat');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn]);
 
   return (
     <View style={styles.container}>
