@@ -8,8 +8,7 @@ interface PropsType {
 }
 
 const ChatHistory = ({ chatHistory }: PropsType) => {
-  console.log('ChatHistory: ', chatHistory);
-
+  // console.log('CHAT HISTORY: ', chatHistory);
   return (
     <FlatList
       inverted

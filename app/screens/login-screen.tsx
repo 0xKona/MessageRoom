@@ -12,8 +12,8 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<WebsocketChatNavigationProp>();
   const setNewUserName = (newName: string) => dispatch(setUserName(newName));
-  console.log('User Name: ', userName);
-  console.log('User LoggedIn? : ', loggedIn);
+  // console.log('User Name: ', userName);
+  // console.log('User LoggedIn? : ', loggedIn);
   const handleEnter = () => {
     dispatch(userLogin());
     navigation.navigate('Websocket Chat');

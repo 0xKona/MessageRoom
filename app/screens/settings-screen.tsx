@@ -1,19 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { closeChatConnection } from '../api-connections/chat';
+// import { closeChatConnection } from '../api-connections/chat';
 import { useDispatch } from 'react-redux';
 import { userLogout } from '../../redux/slices/user';
 import { useNavigation } from '@react-navigation/native';
 import { LoginNavigationProp } from '../../types/navigation-types';
+import { AppDispatch } from '../../redux/store';
+import { useWebSocket } from '../context/websocketContext';
 
 const SettingsScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const { closeConnection } = useWebSocket();
   const navigation = useNavigation<LoginNavigationProp>();
 
   const handleLogout = () => {
-    closeChatConnection();
     dispatch(userLogout());
     navigation.navigate('Login');
+    closeConnection();
   };
 
   return (

@@ -1,27 +1,26 @@
+// ChatInput.tsx
 import React from 'react';
 import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { sendMsg } from '../../api-connections/chat';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useWebSocket } from '../../context/websocketContext';
 
 const ChatInput = () => {
   const [text, setText] = React.useState('');
+  const { sendMessage } = useWebSocket();
 
-  const updateText = (e: any) =>
-    setText(e.nativeEvent.text);
+  const updateText = (e: any) => setText(e.nativeEvent.text);
 
-  const sendMessage = () => {
-    sendMsg(text);
+  const handleSendMessage = () => {
+    sendMessage(text, 1);
     setText('');
   };
 
   return (
-    <View
-      style={styles.ChatInput}
-    >
+    <View style={styles.ChatInput}>
       <SafeAreaView style={styles.SafeContainer}>
         <TextInput style={styles.Input} onChange={updateText} value={text} />
-        <TouchableOpacity style={styles.IconContainer} onPress={sendMessage}>
-          <Icon name="send" size={30}/>
+        <TouchableOpacity style={styles.IconContainer} onPress={handleSendMessage}>
+          <Icon name="send" size={30} />
         </TouchableOpacity>
       </SafeAreaView>
     </View>

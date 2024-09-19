@@ -1,60 +1,51 @@
 import { MessageObject } from '../../types/message';
 
-interface ParsedData {
-  body: string;
-  type: number;
-}
-
 interface ParsedBody {
   userID: string;
   userName: string;
   text: string;
+  type: number;
 }
 
-export const parseTextMessage = (messageData: { data: string }): MessageObject | null => {
-  let newMessage: MessageObject | null = null; // Ensure newMessage is always defined
+// message obj
+// userID: string;
+//     userName: string;
+//     text: string;
+//     type: number
 
+export const parseTextMessage = (messageData: { body: string }): MessageObject | null => {
+  let newMessage: MessageObject | null = null;
+  // console.log('New Message:', messageData);
   // Check if messageData.data is a string
-  if (typeof messageData.data === 'string') {
-    try {
-      // Parse the messageData.data string
-      const parsedData: ParsedData = JSON.parse(messageData.data);
-      console.log('Parsed Data: ', parsedData);
-
-      // Check if 'body' inside 'parsedData' is a JSON string
-      if (typeof parsedData.body === 'string') {
-        const parsedBody: ParsedBody = JSON.parse(parsedData.body);
-
-        // Log parsed body information
-        console.log('Parsed Body:', parsedBody);
-        console.log('User ID:', parsedBody.userID);
-        console.log('Text:', parsedBody.text);
-
-        // Assign newMessage based on parsed data
-        newMessage = {
-          userID: String(parsedBody.userID),
-          userName: String(parsedBody.userName),
-          text: parsedBody.text,
-          type: parsedData.type,
-        };
-      }
-    } catch (error) {
-      console.error('Error parsing message data:', error);
-    }
-  }
-
+  const parsedBody: ParsedBody = JSON.parse(messageData.body);
+  // console.log('[ParseTextMessage]: parsedBody', parsedBody);
+  newMessage = {
+    userID: parsedBody.userID,
+    userName: parsedBody.userName,
+    type: parsedBody.type,
+    text: parsedBody.text,
+  };
+  console.log('ParsedTextMessage: ', newMessage);
   return newMessage;
 };
 
-export const parseEnterExit = (messageData: {data: string}) => {
-  console.log('[parseEnterExit]: Input Data: ', messageData);
+export const parseEnterExit = (messageData: {body: string, type: number}): MessageObject | null => {
+  // console.log('[parseEnterExit]: Input Data: ', messageData);
   let newMessage: MessageObject | null = null;
-  if (typeof messageData.data === 'string') {
-    const data = JSON.parse(JSON.parse(messageData.data).body);
-    console.log('[parseEnterExit]: Parsed Data', data);
-    newMessage = {text: data.Text, type: 2, userID: data.UserID, userName: data.UserName};
-  }
+  const parsedBody = JSON.parse(messageData.body);
+  // console.log('ENTEREXIT PARSED BODY: ', parsedBody);
+  // if (typeof messageData.body === 'string') {
+  //   const data = JSON.parse(JSON.parse(messageData.body).body);
+  //   console.log('[parseEnterExit]: Parsed Data', data);
+  //   newMessage = {text: data.Text, type: 2, userID: data.UserID, userName: data.UserName};
+  // }
+  newMessage = {
+    userID: parsedBody.UserID,
+    userName: parsedBody.UserName,
+    type: messageData.type,
+    text: parsedBody.Text,
+  };
 
-
+  console.log('ParsedEnterExit: ', newMessage);
   return newMessage;
 };

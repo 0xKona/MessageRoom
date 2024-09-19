@@ -1,3 +1,4 @@
+// App.tsx
 import React from 'react';
 import AppScreen from './screens/app-screen';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -10,6 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native';
 import SettingsScreen from './screens/settings-screen';
+import { WebSocketProvider } from './context/websocketContext';
 
 const Settings = () => {
   const navigation = useNavigation<SettingsNavigationProp>();
@@ -18,29 +20,38 @@ const Settings = () => {
     <TouchableOpacity onPress={handlePress}>
       <Icon name="gears" size={25} />
     </TouchableOpacity>
-  );};
+  );
+};
 
 const App = (): React.JSX.Element => {
-
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={LoginScreen} options={{
-              headerLeft: () => null,
-            }}/>
-            <Stack.Screen name="Websocket Chat" component={AppScreen} options={{
-              headerLeft: () => null,
-
-              headerRight: Settings,
-              headerBackVisible: false,
-            }}/>
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <WebSocketProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  headerLeft: () => null,
+                }}
+              />
+              <Stack.Screen
+                name="Websocket Chat"
+                component={AppScreen}
+                options={{
+                  headerLeft: () => null,
+                  headerRight: Settings,
+                  headerBackVisible: false,
+                }}
+              />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </WebSocketProvider>
       </PersistGate>
     </Provider>
   );
