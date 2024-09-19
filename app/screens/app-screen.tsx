@@ -1,8 +1,7 @@
-// AppScreen.tsx
+import React from 'react';
 import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import ChatHistory from '../components/chat-history';
 import ChatInput from '../components/chat-input/chat-input';
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 

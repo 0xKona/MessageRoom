@@ -1,4 +1,3 @@
-// ChatInput.tsx
 import React from 'react';
 import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,7 +17,7 @@ const ChatInput = () => {
   return (
     <View style={styles.ChatInput}>
       <SafeAreaView style={styles.SafeContainer}>
-        <TextInput style={styles.Input} onChange={updateText} value={text} />
+        <TextInput placeholder="Enter your message..." style={styles.Input} onChange={updateText} value={text} />
         <TouchableOpacity style={styles.IconContainer} onPress={handleSendMessage}>
           <Icon name="send" size={30} />
         </TouchableOpacity>
