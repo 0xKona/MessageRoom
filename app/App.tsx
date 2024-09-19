@@ -1,4 +1,3 @@
-// App.tsx
 import React from 'react';
 import AppScreen from './screens/app-screen';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -31,7 +30,7 @@ const App = (): React.JSX.Element => {
       <PersistGate loading={null} persistor={persistor}>
         <WebSocketProvider>
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName="Login" screenOptions={{gestureEnabled: false, fullScreenGestureEnabled: false}}>
               <Stack.Screen
                 name="Login"
                 component={LoginScreen}
@@ -46,6 +45,7 @@ const App = (): React.JSX.Element => {
                   headerLeft: () => null,
                   headerRight: Settings,
                   headerBackVisible: false,
+                  gestureEnabled: false,
                 }}
               />
               <Stack.Screen name="Settings" component={SettingsScreen} />

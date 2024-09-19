@@ -12,16 +12,20 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<WebsocketChatNavigationProp>();
   const setNewUserName = (newName: string) => dispatch(setUserName(newName));
-  // console.log('User Name: ', userName);
-  // console.log('User LoggedIn? : ', loggedIn);
   const handleEnter = () => {
     dispatch(userLogin());
-    navigation.navigate('Websocket Chat');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Websocket Chat' }],
+    });
   };
 
   React.useEffect(() => {
     if (loggedIn) {
-      navigation.navigate('Websocket Chat');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Websocket Chat' }],
+      });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
