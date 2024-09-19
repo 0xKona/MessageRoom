@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  extends: ['@react-native', 'prettier'],
   rules: {
     'quotes': ['error', 'single'],
     // we want to force semicolons
@@ -9,5 +9,6 @@ module.exports = {
     'indent': ['error', 2],
     // we want to avoid extraneous spaces
     'no-multi-spaces': ['error'],
+    'react/jsx-first-prop-new-line': ['error', 'multiline'], // or "always"
   },
 };
