@@ -17,3 +17,8 @@ export type SettingsNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Settings'
 >;
+
+export type LoginNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;

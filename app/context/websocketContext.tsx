@@ -1,4 +1,3 @@
-// WebSocketContext.tsx
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,6 +9,7 @@ import {
 import { AppDispatch, RootState } from '../../redux/store';
 import { parseEnterExit, parseTextMessage } from '../../app/utils/parse';
 import { MessageObject } from '../../types/message';
+import * as config from '../config/config.json';
 
 interface WebSocketContextValue {
   sendMessage: (msg: string, type?: number) => void;
@@ -63,7 +63,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
     let socket: WebSocket | null = null;
 
     const connect = () => {
-      const wsUrl = `ws://127.0.0.1:8080/ws?userID=${encodeURIComponent(userID)}&userName=${encodeURIComponent(userName)}`;
+      const wsUrl = `ws://${config.serverUrl}/ws?userID=${encodeURIComponent(userID)}&userName=${encodeURIComponent(userName)}`;
       socket = new WebSocket(wsUrl);
       socketRef.current = socket;
 

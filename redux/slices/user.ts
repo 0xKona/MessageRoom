@@ -22,7 +22,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUserID(state, action: PayloadAction<string>) {
-      state.userID = action.payload; // Directly set userID
+      state.userID = action.payload; 
     },
     setUserName(state, action: PayloadAction<string>) {
       state.userName = action.payload;
