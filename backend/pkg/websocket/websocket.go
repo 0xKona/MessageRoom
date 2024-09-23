@@ -1,10 +1,10 @@
 package websocket
 
 import (
+	"fmt"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{
@@ -21,4 +21,23 @@ func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	}
 
 	return conn, nil
+}
+
+func ServeWs(pool Pool, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("WebSocket Endpoint Hit")
+	conn, err := Upgrade(w, r)
+	if err != nil {
+		fmt.Fprintf(w, "%+v\n", err)
+	}
+	userID := r.URL.Query().Get("userID")
+	userName := r.URL.Query().Get("userName")
+	client := &Client{
+		ID:   userID,
+		Name: userName,
+		Conn: conn,
+		Pool: &pool,
+	}
+
+	pool.Register <- client
+	client.Read()
 }
