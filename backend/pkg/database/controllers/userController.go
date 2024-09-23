@@ -18,7 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
+var userCollection *mongo.Collection = database.OpenCollection("user")
 var validate = validator.New()
 
 // Used to encrypt password before it is stored in database
@@ -42,24 +42,28 @@ func VerifyPassword(userPassword string, providedPassword string) (bool, string)
 
 func Signup() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		fmt.Println("**Signup Called**")
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
 		var user models.User
 
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			cancel()
 			return
 		}
 
 		validationError := validate.Struct(user)
 		if validationError != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationError.Error()})
+			cancel()
 			return
 		}
 
 		count, err := userCollection.CountDocuments(ctx, bson.M{"email": user.Email})
 		defer cancel()
 		if err != nil {
-			log.Panic(err)
+			log.Panic("Error counting documents: ", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while checking for the email"})
 			return
 		}
@@ -75,7 +79,13 @@ func Signup() gin.HandlerFunc {
 		user.CreatedAt = time.Now()
 		user.UpdatedAt = time.Now()
 		user.ID = primitive.NewObjectID()
-		*user.UserID = user.ID.Hex()
+		//*user.UserID = user.ID.Hex()
+		if user.UserID == nil {
+			userID := user.ID.Hex()
+			user.UserID = &userID
+		} else {
+			*user.UserID = user.ID.Hex()
+		}
 		token, refreshToken, _ := helpers.GenerateAllTokens(*user.Email, *user.UserName, *user.UserID)
 		user.Token = &token
 		user.RefreshToken = &refreshToken
@@ -100,6 +110,7 @@ func Login() gin.HandlerFunc {
 
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			cancel()
 			return
 		}
 

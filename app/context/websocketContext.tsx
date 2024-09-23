@@ -63,7 +63,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
     let socket: WebSocket | null = null;
 
     const connect = () => {
-      const wsUrl = `ws://${config.serverUrl}/ws?userID=${encodeURIComponent(userID)}&userName=${encodeURIComponent(userName)}`;
+      const wsUrl = `ws://${config.serverUrl}:${config.websocketPort}/ws?userID=${encodeURIComponent(userID)}&userName=${encodeURIComponent(userName)}`;
       socket = new WebSocket(wsUrl);
       socketRef.current = socket;
 

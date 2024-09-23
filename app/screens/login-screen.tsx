@@ -33,7 +33,7 @@ const LoginScreen = () => {
 
   const testAPI = async() => {
     try {
-      const response = await fetch(`http://${config.serverUrl}/`);
+      const response = await fetch(`http://${config.serverUrl}:${config.httpPort}/`);
       if (!response.ok) {
         console.error('test api failed: ', response.status);
       } else {

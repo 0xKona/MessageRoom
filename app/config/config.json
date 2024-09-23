@@ -1,3 +1,5 @@
 {
-    "serverUrl": "127.0.0.1:8090"
+    "serverUrl": "127.0.0.1",
+    "websocketPort": "8090",
+    "httpPort": "8080"
 }

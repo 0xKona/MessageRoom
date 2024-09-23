@@ -21,7 +21,7 @@ type SignedDetails struct {
 	jwt.StandardClaims
 }
 
-var userCollection *mongo.Collection = database.OpenCollection(database.Client, "users")
+var userCollection *mongo.Collection = database.OpenCollection("users")
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
 // Generates both the detailed token and the refresh token
