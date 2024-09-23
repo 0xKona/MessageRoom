@@ -6,6 +6,7 @@ import { setErrorMessage, setUserName, userLogin } from '../../redux/slices/user
 import { useNavigation } from '@react-navigation/native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { WebsocketChatNavigationProp } from '../../types/navigation-types';
+import * as config from '../config/config.json';
 
 const LoginScreen = () => {
   const { userName, loggedIn, error } = useSelector((state: RootState) => state.user);
@@ -30,7 +31,22 @@ const LoginScreen = () => {
     }
   };
 
+  const testAPI = async() => {
+    try {
+      const response = await fetch(`http://${config.serverUrl}/`);
+      if (!response.ok) {
+        console.error('test api failed: ', response.status);
+      } else {
+        const json = await response.json();
+        console.warn('Test API Success: ', json.message);
+      }
+    } catch (error) {
+      console.error('try catch test api fail: ', error);
+    }
+  };
+
   React.useEffect(() => {
+    testAPI();
     if (loggedIn) {
       navigation.reset({
         index: 0,

@@ -1,0 +1,11 @@
+services:
+  ws_chat_database:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ws-chat-database-data:/data/db
+
+volumes:
+  ws-chat-database-data:

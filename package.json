@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "server": "cd backend && go run main.go"
+    "server": "cd backend && go run main.go",
+    "database": "cd backend && docker compose up"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
