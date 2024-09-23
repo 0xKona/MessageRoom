@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 import uuid from 'react-native-uuid';
+import * as config from '../../app/config/config.json';
 
 interface UserState {
     userID: string,
@@ -16,6 +18,27 @@ const initialState: UserState = {
   loading: false,
   error: null,
 };
+
+export const signIn = createAsyncThunk(
+  'user/signIn', 
+  async (params: {UserName: string, Email: string, Password: string}, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://${config.serverUrl}:${config.httpPort}/users/signup`, {
+        UserName: params.UserName,
+        Password: params.Password,
+        Email: params.Email
+
+      });
+
+      if (response.status === 200) {
+        console.log('Sign up successful, make a green notification for this');
+      }
+    } catch (error: any) {
+      console.log('[SIGN IN ERROR]: ', error);
+      rejectWithValue(error.message);
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
