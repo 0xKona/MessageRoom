@@ -30,14 +30,12 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
-func VerifyPassword(userPassword string, providedPassword string) (bool, string) {
-	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
-	check := true
-	msg := ""
+func VerifyPassword(hashedPassword string, providedPassword string) (bool, string) {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(providedPassword))
 	if err != nil {
-		msg = fmt.Sprintf("Login or password is incorrect")
+		return false, "Login or password is incorrect"
 	}
-	return check, msg
+	return true, ""
 }
 
 func Signup() gin.HandlerFunc {
@@ -108,28 +106,36 @@ func Login() gin.HandlerFunc {
 		var user models.User
 		var foundUser models.User
 
+		// Bind the request JSON to the user model
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			cancel()
 			return
 		}
-
+		// Find the user by email in the database
 		err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "login or password is incorrect"})
 			return
 		}
+		// Ensure that both passwords (user and foundUser) are not nil
+		if user.Password == nil || foundUser.Password == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "login or password is incorrect"})
+			return
+		}
+		// Verify the password by comparing the provided password with the stored hashed password
+		passwordIsValid, msg := VerifyPassword(*foundUser.Password, *user.Password)
+		fmt.Println("Password is valid: ", passwordIsValid)
 
-		passwordIsValid, msg := VerifyPassword(*user.Password, *foundUser.Password)
-		defer cancel()
 		if !passwordIsValid {
 			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
 			return
 		}
-
+		// Generate new tokens and update them in the database
 		token, refreshToken, _ := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.UserName, *foundUser.UserID)
 		helpers.UpdateAllTokens(token, refreshToken, *foundUser.UserID)
+		// Return the found user data upon successful login
 		c.JSON(http.StatusOK, foundUser)
 	}
 }

@@ -49,7 +49,7 @@ export const signUp = createAsyncThunk(
       }
     } catch (error: any) {
       console.log('[SIGN UP ERROR]: ', error);
-      rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -77,13 +77,24 @@ export const signIn = createAsyncThunk(
       });
 
       if (response.status === 200) {
-        console.log('Sign up successful, make a green notification for this');
-        console.log('Sign in response: ', response.data);
+        console.log('Sign in successful, make a green notification for this');
         return response.data;
+   
+      } else {
+        return rejectWithValue(`Login failed: ${response.statusText}`);
       }
     } catch (error: any) {
-      console.log('[SIGN IN ERROR]: ', error);
-      rejectWithValue(error.message);
+      console.log('[SIGN IN ERROR]: ', error.response.data.error);
+      if (error.response) {
+        console.log('Error Case 1: ', error.response.data.error);
+        return rejectWithValue(`Login Failed: \n ${error.response.data.error || error.response.statusText}`);
+      } else if (error.request) {
+        console.log('Error Case 2');
+        return rejectWithValue('Network error: No response from the server');
+      } else {
+        console.log('Error Case 3: ', error.response.data.error);
+        return rejectWithValue(`Login failed: ${error.message}`);
+      }
     }
   }
 );
@@ -108,9 +119,9 @@ const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(signIn.rejected, (state, action) => {
-      console.log('login failed', action.error);
+      console.log('login failed', action);
       state.loading = false;
-      state.error = action.error.message || 'Failed to login';
+      state.error = String(action.payload || 'Failed to login. \n Please try again later');
     }),
     builder.addCase(signIn.pending, (state) => {
       console.log('login pending');

@@ -19,6 +19,7 @@ const LoginScreen = () => {
         routes: [{ name: 'Websocket Chat' }],
       });
     }
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
 
@@ -43,10 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    paddingTop: 60
-    // paddingBottom: 200,
-    // justifyContent: 'space-around',
-    // alignItems: 'center',
+    paddingTop: 60,
   },
   titleText: {
     alignSelf: 'center',
