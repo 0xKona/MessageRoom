@@ -1,21 +1,29 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { signIn } from '../../../redux/slices/user';
 
 const LoginFormInput = () => {
-  const [loginUsername, setLoginUsername] = React.useState<string>('');
+  const [loginEmail, setLoginEmail] = React.useState<string>('');
   const [loginPassword, setLoginPassword] = React.useState<string>('');
 
-  const handleLogin = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
+  const handleLogin = () => {
+    dispatch(signIn({
+      Email: loginEmail,
+      Password: loginPassword,
+    }));
   };
 
   return (
     <View>
       <TextInput 
-        label="Username" 
-        value={loginUsername} 
-        onChangeText={setLoginUsername} 
+        label="Email" 
+        value={loginEmail} 
+        onChangeText={setLoginEmail} 
         mode="outlined" 
         outlineColor="blue" 
         style={styles.textInput}

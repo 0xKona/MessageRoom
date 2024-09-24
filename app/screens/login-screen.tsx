@@ -8,9 +8,10 @@ import { WebsocketChatNavigationProp } from '../../types/navigation-types';
 import LoginForm from '../components/loginform';
 
 const LoginScreen = () => {
-  const { loggedIn } = useSelector((state: RootState) => state.user);
+  const { loggedIn, userData } = useSelector((state: RootState) => state.user);
   const navigation = useNavigation<WebsocketChatNavigationProp>();
-
+  console.log('User LoggedIn : ', loggedIn);
+  console.log('user Data: ', userData);
   React.useEffect(() => {
     if (loggedIn) {
       navigation.reset({
@@ -36,21 +37,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     height: '100%',
-    justifyContent: 'space-evenly',
   },
   container: {
     height: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    paddingBottom: 200,
-    justifyContent: 'space-around',
+    paddingTop: 60
+    // paddingBottom: 200,
+    // justifyContent: 'space-around',
     // alignItems: 'center',
   },
   titleText: {
     alignSelf: 'center',
     fontSize: 40,
     fontWeight: 'bold',
+    marginBottom: 60
   },
 });
 

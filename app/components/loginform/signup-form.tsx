@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
-import { signIn } from '../../../redux/slices/user';
+import { signUp } from '../../../redux/slices/user';
 
 const SignupForm = () => {
   const [newUserName, setNewUserName] = React.useState<string>('');
@@ -13,8 +13,9 @@ const SignupForm = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  // TODO -  Form Validation and navigation.
   const handleSignup = () => {
-    dispatch(signIn({
+    dispatch(signUp({
       UserName: newUserName,
       Password: newPassword,
       Email: newEmailAddress

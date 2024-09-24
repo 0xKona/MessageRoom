@@ -26,7 +26,9 @@ const styles = (currentForm?: FormType, form?: FormType, index?: number) => Styl
     alignItems: 'center',
     backgroundColor: currentForm === form ? 'blue' : 'lightgrey',
     borderTopLeftRadius: index === 0 ? 5 : 0,
-    borderTopRightRadius: index === 1 ? 5 : 0
+    borderBottomLeftRadius: index === 0 ? 5 : 0,
+    borderTopRightRadius: index === 1 ? 5 : 0,
+    borderBottomRightRadius: index === 1 ? 5 : 0
   },
   text: {
     color: currentForm === form ? 'white' : 'black'
