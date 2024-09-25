@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { useNavigation } from '@react-navigation/native';
@@ -8,10 +8,9 @@ import { WebsocketChatNavigationProp } from '../../types/navigation-types';
 import LoginForm from '../components/loginform';
 
 const LoginScreen = () => {
-  const { loggedIn, userData } = useSelector((state: RootState) => state.user);
+  const { loggedIn } = useSelector((state: RootState) => state.user);
   const navigation = useNavigation<WebsocketChatNavigationProp>();
-  console.log('User LoggedIn : ', loggedIn);
-  console.log('user Data: ', userData);
+
   React.useEffect(() => {
     if (loggedIn) {
       navigation.reset({
@@ -19,24 +18,22 @@ const LoginScreen = () => {
         routes: [{ name: 'Websocket Chat' }],
       });
     }
-    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
       <View style={styles.container}>
         <Text style={styles.titleText}>Login!</Text>
         <LoginForm />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     paddingHorizontal: 20,
-    paddingTop: 20,
     height: '100%',
   },
   container: {
@@ -44,7 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 80,
   },
   titleText: {
     alignSelf: 'center',

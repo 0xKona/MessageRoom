@@ -8,7 +8,6 @@ interface PropsType {
 }
 
 const MessageCard = ({messageData}: PropsType) => {
-  // console.log('Message Card Data: ', messageData);
   const { userID } = useSelector((state: RootState) => state.user);
 
   const isMe = userID === messageData.userID;

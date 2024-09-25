@@ -91,11 +91,6 @@ const SignupForm = ({ toggleForm }: PropsType) => {
   };
 
   const handleSignup = () => {
-    console.log(`Signing up with \n
-        username: ${formData.userName.value}
-        email: ${formData.emailAddress.value}
-        password: ${formData.password.value}
-    `);
     if (validateForSubmission()) {
       dispatch(signUp({
         UserName: formData.userName.value,
@@ -112,7 +107,7 @@ const SignupForm = ({ toggleForm }: PropsType) => {
     }}).filter((item: string | undefined) => item !== undefined);
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput 
         label="Enter Username*" 
         value={formData.userName.value} 
@@ -132,13 +127,14 @@ const SignupForm = ({ toggleForm }: PropsType) => {
         error={formData.emailAddress.error ? true : false}
       />
       <TextInput 
-        label="Password*" 
+        label=" Enter Password*" 
         value={formData.password.value} 
         onChangeText={setNewPassword} 
         mode="outlined" 
         outlineColor="blue" 
         style={styles.textInput}
         error={formData.password.error ? true : false}
+        secureTextEntry
       />
       <TextInput 
         label="Confirm Password*" 
@@ -148,6 +144,7 @@ const SignupForm = ({ toggleForm }: PropsType) => {
         outlineColor="blue" 
         error={formData.confirmPassword.error ? true : false}
         style={styles.textInput}
+        secureTextEntry
       />
       <Text style={styles.errorText}>{error || formErrors[0]}</Text>
       <Button 
@@ -163,6 +160,9 @@ const SignupForm = ({ toggleForm }: PropsType) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 20
+  },
   errorText: {
     alignSelf: 'center',
     fontSize: 15,

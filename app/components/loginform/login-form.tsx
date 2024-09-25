@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
@@ -26,8 +26,6 @@ const LoginFormInput = () => {
   const { error, loading } = useSelector((state: RootState) => state.user);
 
   const handleLogin = () => {
-    console.log(`Logging in with \n Email: ${formData.emailAddress.value} 
-    \n Password: ${formData.password.value}`);
     dispatch(signIn({
       Email: formData.emailAddress.value,
       Password: formData.password.value,
@@ -66,9 +64,9 @@ const LoginFormInput = () => {
     }}).filter((item: string | undefined) => item !== undefined);
 
   return (
-    <>
+    <View style={styles.container}>
       <TextInput 
-        label="Email" 
+        label="Enter Email" 
         value={formData.emailAddress.value} 
         onChangeText={setNewEmailAddress} 
         mode="outlined" 
@@ -77,7 +75,8 @@ const LoginFormInput = () => {
         error={formData.emailAddress.error ? true : false}
       />
       <TextInput 
-        label="Password" 
+        label="Enter Password" 
+        secureTextEntry
         value={formData.password.value} 
         onChangeText={setNewPassword} 
         mode="outlined" 
@@ -93,11 +92,14 @@ const LoginFormInput = () => {
         onPress={handleLogin} 
         mode="contained-tonal"
       >Login to chat!</Button>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 20
+  },
   errorText: {
     alignSelf: 'center',
     fontSize: 15,

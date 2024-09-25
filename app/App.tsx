@@ -35,7 +35,7 @@ const App = (): React.JSX.Element => {
                 name="Login"
                 component={LoginScreen}
                 options={{
-                  headerLeft: () => null,
+                  headerShown: false
                 }}
               />
               <Stack.Screen
