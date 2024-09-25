@@ -126,7 +126,6 @@ func Login() gin.HandlerFunc {
 		}
 		// Verify the password by comparing the provided password with the stored hashed password
 		passwordIsValid, msg := VerifyPassword(*foundUser.Password, *user.Password)
-		fmt.Println("Password is valid: ", passwordIsValid)
 
 		if !passwordIsValid {
 			c.JSON(http.StatusBadRequest, gin.H{"error": msg})

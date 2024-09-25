@@ -36,7 +36,7 @@ const LoginForm = () => {
         ))}
       </View>
       {currentForm === 'Login' && <LoginFormInput />}
-      {currentForm === 'Signup' && <SignupForm />}
+      {currentForm === 'Signup' && <SignupForm toggleForm={toggleForm}/>}
     </View>
   );
 };

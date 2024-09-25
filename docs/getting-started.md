@@ -12,6 +12,16 @@
 
 ## Running backend
 
+Create a `.env` file in the root of the backend directory with the following variables:
+
+```env
+MONGO_DB=mongodb://127.0.0.1:27017
+MONGO_DB_NAME=ws_chat_database-1
+HTTP_PORT=8080
+WEBSOCKET_PORT=8090 
+```
+    
+
 The backend is written in GO and can be started either by:
 
 - Running `cd backend` and then `go run main.go`
@@ -22,7 +32,7 @@ or by running
 
 ## Setting server url
 
-You can set the serverUrl and port [here](../app/config/config.json)
+You can set the serverUrl and port for the frontend here [here](../app/config/config.json)
 
 If running on emulators (Android) or simulator (iOS) localhost / 127.0.0.1 should work okay.
 

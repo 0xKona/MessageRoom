@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as config from '../../app/config/config.json';
+import Snackbar from 'react-native-snackbar';
 
 interface UserData {
   email: string,
@@ -35,20 +36,29 @@ const initialState: UserState = {
 
 export const signUp = createAsyncThunk(
   'user/signUp', 
-  async (params: {UserName: string, Email: string, Password: string}, { rejectWithValue }) => {
+  async (params: {UserName: string, Email: string, Password: string, onSuccess?: () => void}, { rejectWithValue }) => {
     try {
       const response = await axios.post(`http://${config.serverUrl}:${config.httpPort}/users/signup`, {
         UserName: params.UserName,
         Password: params.Password,
         Email: params.Email
-
       });
 
       if (response.status === 200) {
-        console.log('Sign up successful, make a green notification for this');
+        console.log('Sign up successful');
+        Snackbar.show({
+          text: 'Account Created: You can now sign in!',
+          duration: 10000,
+          action: {
+            text: 'Dismiss',
+            textColor: 'white',
+            onPress: () => Snackbar.dismiss()
+          }
+        });
+        params.onSuccess && params.onSuccess();
       }
     } catch (error: any) {
-      console.log('[SIGN UP ERROR]: ', error);
+      console.log('[SIGN UP ERROR]: ', error.response);
       return rejectWithValue(error.message);
     }
   }
@@ -86,13 +96,10 @@ export const signIn = createAsyncThunk(
     } catch (error: any) {
       console.log('[SIGN IN ERROR]: ', error.response.data.error);
       if (error.response) {
-        console.log('Error Case 1: ', error.response.data.error);
         return rejectWithValue(`Login Failed: \n ${error.response.data.error || error.response.statusText}`);
       } else if (error.request) {
-        console.log('Error Case 2');
         return rejectWithValue('Network error: No response from the server');
       } else {
-        console.log('Error Case 3: ', error.response.data.error);
         return rejectWithValue(`Login failed: ${error.message}`);
       }
     }
@@ -118,17 +125,17 @@ const userSlice = createSlice({
     userLogout : () => initialState,
   },
   extraReducers: builder => {
+    builder.addCase(signIn.pending, (state) => {
+      console.log('[LOGIN]: Login pending');
+      state.loading = true;
+    }),
     builder.addCase(signIn.rejected, (state, action) => {
-      console.log('login failed', action);
+      console.log('[LOGIN]: Login rejected');
       state.loading = false;
       state.error = String(action.payload || 'Failed to login. \n Please try again later');
     }),
-    builder.addCase(signIn.pending, (state) => {
-      console.log('login pending');
-      state.loading = true;
-    }),
     builder.addCase(signIn.fulfilled, (state, action) => {
-      console.log('login fuffilled, action.payload = ', action.payload);
+      console.log('[LOGIN]: Login successfull');
       state.loading = false;
       state.loggedIn = true;
       state.userID = action.payload.UserID;
