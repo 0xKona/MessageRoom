@@ -13,6 +13,7 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
+// Upgrade : Upgrades the incoming HTTP request to a websocket connection
 func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -23,6 +24,7 @@ func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	return conn, nil
 }
 
+// ServeWs : Registers incoming user and connects them to the pool.
 func ServeWs(pool Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
 	conn, err := Upgrade(w, r)

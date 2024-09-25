@@ -10,6 +10,7 @@ import (
 	"sync"
 )
 
+// setupRoutes : Routes incoming HTTP Requests to the relevant API
 func setupRoutes() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
@@ -18,6 +19,7 @@ func setupRoutes() *gin.Engine {
 	return router
 }
 
+// setupWebsockets : Routes incoming websocket requests to relevant API
 func setupWebsockets() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
@@ -60,6 +62,7 @@ func main() {
 		websocketRouter := setupWebsockets()
 		err := websocketRouter.Run(":" + websocketPort)
 		if err != nil {
+
 			panic(err)
 		}
 	}()

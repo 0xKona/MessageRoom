@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// Validates token and authorizes user
+// Authentication : Middleware that validates token and authorizes user
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fmt.Println("** Authentication Middleware Called")

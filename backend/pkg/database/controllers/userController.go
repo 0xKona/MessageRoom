@@ -21,7 +21,7 @@ import (
 var userCollection *mongo.Collection = database.OpenCollection("user")
 var validate = validator.New()
 
-// Used to encrypt password before it is stored in database
+// HashPassword : Used to encrypt password before it is stored in database, takes a string as an argument
 func HashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -30,6 +30,10 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
+/*
+VerifyPassword : Takes a stored (hashed) password and a user provided password (string) and checks if they match.
+returns a boolean (true if matches / false if not) and an error message (string)
+*/
 func VerifyPassword(hashedPassword string, providedPassword string) (bool, string) {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(providedPassword))
 	if err != nil {
@@ -38,9 +42,12 @@ func VerifyPassword(hashedPassword string, providedPassword string) (bool, strin
 	return true, ""
 }
 
+/*
+Signup : gin handlerFunction allowing users to sign up and use the application
+*/
 func Signup() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("**Signup Called**")
+		fmt.Println("[User Signup]")
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
 		var user models.User
@@ -61,8 +68,8 @@ func Signup() gin.HandlerFunc {
 		count, err := userCollection.CountDocuments(ctx, bson.M{"email": user.Email})
 		defer cancel()
 		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while checking for the email"})
 			log.Panic("Error counting documents: ", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while checking for the email"})
 			return
 		}
 
@@ -77,7 +84,7 @@ func Signup() gin.HandlerFunc {
 		user.CreatedAt = time.Now()
 		user.UpdatedAt = time.Now()
 		user.ID = primitive.NewObjectID()
-		//*user.UserID = user.ID.Hex()
+
 		if user.UserID == nil {
 			userID := user.ID.Hex()
 			user.UserID = &userID
@@ -136,12 +143,5 @@ func Login() gin.HandlerFunc {
 		helpers.UpdateAllTokens(token, refreshToken, *foundUser.UserID)
 		// Return the found user data upon successful login
 		c.JSON(http.StatusOK, foundUser)
-	}
-}
-
-func Test() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		fmt.Println("TEST SUCCESS")
-		c.JSON(http.StatusOK, gin.H{})
 	}
 }

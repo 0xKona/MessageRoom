@@ -11,48 +11,7 @@ import (
 	"time"
 )
 
-//func DBinstance() *mongo.Client {
-//	err := godotenv.Load(".env")
-//	if err != nil {
-//		log.Fatal("Error loading .env file")
-//	}
-//
-//	MongoDb := os.Getenv("MONGO_DB")
-//
-//	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-//	defer cancel()
-//
-//	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MongoDb))
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	err = client.Ping(ctx, nil)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	return client
-//}
-//
-//// Global MongoDB client instance
-//var Client *mongo.Client = DBinstance()
-//
-//// OpenCollection returns a reference to a collection in the database
-//func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-//	// Get the MongoDB database name from environment variables
-//	dbName := os.Getenv("MONGO_DB_NAME")
-//
-//	// Return a collection handle for the specified collection
-//	return client.Database(dbName).Collection(collectionName)
-//}
-
-// Example usage of OpenCollection
-//func main() {
-//	collection := OpenCollection(Client, "example_collection")
-//	fmt.Println("Connected to collection:", collection.Name())
-//}
-
-// Old Code
+// DBinstance : Connects to the mongo database and returns a client that can interacted with
 func DBinstance() *mongo.Client {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -77,9 +36,13 @@ func DBinstance() *mongo.Client {
 	return client
 }
 
-// Function connects with a collection in the database
+// Client : An instance of DBinstance to connect with a collection in the database
 var Client *mongo.Client = DBinstance()
 
+/*
+OpenCollection : Takes a collectionName as a string, finds it in the Client and returns the collection,
+allowing you to manipulate records
+*/
 func OpenCollection(collectionName string) *mongo.Collection {
 	var collection *mongo.Collection = Client.Database(os.Getenv("MONGO_DB_NAME")).Collection(collectionName)
 	return collection

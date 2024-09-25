@@ -18,11 +18,14 @@ type Message struct {
 	Body string `json:"body"`
 }
 
-// Incoming messages from client
+// Read : Processes incoming data from the client.
 func (c *Client) Read() {
 	defer func() {
 		c.Pool.Unregister <- c
-		c.Conn.Close()
+		err := c.Conn.Close()
+		if err != nil {
+			return
+		}
 	}()
 
 	for {
