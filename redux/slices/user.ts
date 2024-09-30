@@ -108,7 +108,7 @@ export const signIn = createAsyncThunk(
 
 export const deleteAccount = createAsyncThunk(
   'user/deleteAccount',
-  async (params: {Password: string}, { rejectWithValue, getState }) => {
+  async (params: {Password: string, onSuccess: () => void}, { rejectWithValue, getState }) => {
     // @ts-ignore TODO - fix this. 
     const { user } = getState();
     console.log('GET STATE TESTING: ', user.userData.token);
@@ -121,9 +121,11 @@ export const deleteAccount = createAsyncThunk(
           password: params.Password
         }
       });
-      console.log('Delete User Response: ', response);
+      if (response.status === 200) {
+        params.onSuccess();
+      }
     } catch (error) {
-      
+      rejectWithValue('Account Deletion Failed: Please try again later');
     }
   }
 );
@@ -157,17 +159,17 @@ const userSlice = createSlice({
       state.error = String(action.payload || 'Failed to login. \n Please try again later');
     }),
     builder.addCase(signIn.fulfilled, (state, action) => {
-      console.log('[LOGIN]: Login successfull');
+      console.log('[LOGIN]: Login successfull: ', action.payload);
       state.loading = false;
       state.loggedIn = true;
-      state.userID = action.payload.UserID;
-      state.userName = action.payload.UserName;
+      state.userID = action.payload.userID;
+      state.userName = action.payload.username;
       state.userData = {
-        email: action.payload.Email,
-        refreshToken: action.payload.RefreshToken,
-        token: action.payload.Token,
-        createdAt: action.payload.CreatedAt,
-        updatedAt: action.payload.UpdatedAt
+        email: action.payload.email,
+        refreshToken: action.payload.refresh_token,
+        token: action.payload.token,
+        createdAt: action.payload.created_at,
+        updatedAt: action.payload.updated_at
       };
     });
   }

@@ -21,7 +21,7 @@ const SettingsScreen = () => {
   };
 
   const handleDelete = () => {
-    dispatch(deleteAccount({Password: '123456'}));
+    dispatch(deleteAccount({Password: '123456', onSuccess: handleLogout}));
   };
 
   return (
