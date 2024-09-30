@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     paddingTop: 80,
+    minHeight: '100%'
   },
   titleText: {
     alignSelf: 'center',
