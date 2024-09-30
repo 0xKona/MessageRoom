@@ -145,3 +145,73 @@ func Login() gin.HandlerFunc {
 		c.JSON(http.StatusOK, foundUser)
 	}
 }
+
+type Password struct {
+	Password string `json:"password"`
+}
+
+func DeleteUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Step 1: Extract token from headers
+		token := c.Request.Header.Get("Authorization")
+		if token == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			return
+		}
+
+		// Step 2: Validate the JWT and extract user details
+		claims, errStr := helpers.ValidateToken(token)
+		if errStr != "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
+		fmt.Println("User: ", claims)
+
+		// Ensure UserID exists and is not empty
+		if claims.UserID == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID in token"})
+			return
+		}
+
+		// Step 3: Extract the password from the request body
+		var passwordData Password
+		if err := c.BindJSON(&passwordData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+			return
+		}
+		fmt.Println("Provided password: ", passwordData.Password)
+
+		// Step 4: Find the user in the database
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		var foundUser models.User
+		err := userCollection.FindOne(ctx, bson.M{"user_id": claims.UserID}).Decode(&foundUser)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+		fmt.Println("Found Password: ", foundUser.Password)
+		// Step 5: Verify the password
+		if foundUser.Password == nil || passwordData.Password == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid password"})
+			return
+		}
+
+		passwordIsValid, msg := VerifyPassword(*foundUser.Password, passwordData.Password)
+		if !passwordIsValid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": msg})
+			return
+		}
+
+		// Step 6: Delete the user from the database
+		deleteResult, err := userCollection.DeleteOne(ctx, bson.M{"user_id": claims.UserID})
+		if err != nil || deleteResult.DeletedCount == 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
+			return
+		}
+
+		// Step 7: Return a success response
+		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	}
+}

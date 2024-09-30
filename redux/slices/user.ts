@@ -106,6 +106,28 @@ export const signIn = createAsyncThunk(
   }
 );
 
+export const deleteAccount = createAsyncThunk(
+  'user/deleteAccount',
+  async (params: {Password: string}, { rejectWithValue, getState }) => {
+    // @ts-ignore TODO - fix this. 
+    const { user } = getState();
+    console.log('GET STATE TESTING: ', user.userData.token);
+    try {
+      const response = await axios.delete(`http://${config.serverUrl}:${config.httpPort}/users/delete`, {
+        headers: {
+          Authorization: user.userData.token
+        },
+        data: {
+          password: params.Password
+        }
+      });
+      console.log('Delete User Response: ', response);
+    } catch (error) {
+      
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,

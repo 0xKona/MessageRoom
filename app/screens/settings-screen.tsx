@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { userLogout } from '../../redux/slices/user';
+import { deleteAccount, userLogout } from '../../redux/slices/user';
 import { useNavigation } from '@react-navigation/native';
 import { LoginNavigationProp } from '../../types/navigation-types';
 import { AppDispatch, RootState } from '../../redux/store';
@@ -20,6 +20,10 @@ const SettingsScreen = () => {
     closeConnection();
   };
 
+  const handleDelete = () => {
+    dispatch(deleteAccount({Password: '123456'}));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
@@ -29,6 +33,7 @@ const SettingsScreen = () => {
         <Text style={styles.textUserID}>{`(${userID})`}</Text>
       </View>
       <Button style={styles.logoutButton} textColor="white" onPress={handleLogout} mode="contained-tonal">Logout</Button>
+      <Button style={styles.logoutButton} textColor='white' onPress={handleDelete} mode='contained-tonal'>Test Delete</Button>
     </View>
   );
 };

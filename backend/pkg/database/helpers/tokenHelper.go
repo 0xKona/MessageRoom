@@ -21,7 +21,7 @@ type SignedDetails struct {
 	jwt.StandardClaims
 }
 
-var userCollection *mongo.Collection = database.OpenCollection("users")
+var userCollection *mongo.Collection = database.OpenCollection("user")
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
 /*
