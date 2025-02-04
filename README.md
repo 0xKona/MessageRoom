@@ -4,6 +4,8 @@ This is a websocket based instant messaging app for iOS / Android running on Rea
 
 The purpose of this App was to learn how to use Websockets and make a very basic GO backend.
 
+TODO : Make it not realllllllllyyyyyy bad.
+
 ### Guides:
 
 - [React Native Setup](./docs/react-native-setup.md)
